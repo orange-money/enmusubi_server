@@ -1,2 +1,2 @@
-enmusubi_sever
+enmusubi_server
 ==============
