@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @text.user_id %>
+</p>
+
+<p>
+  <strong>Lecture name:</strong>
+  <%= @text.lecture_name %>
+</p>
+
+<p>
+  <strong>Textbook name:</strong>
+  <%= @text.textbook_name %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @text.price %>
+</p>
+
+<p>
+  <strong>Comment:</strong>
+  <%= @text.comment %>
+</p>
+
+<p>
+  <strong>Image:</strong>
+  <%= @text.image %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @text.status %>
+</p>
+
+<%= link_to 'Edit', edit_text_path(@text) %> |
+<%= link_to 'Back', texts_path %>

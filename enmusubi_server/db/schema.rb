@@ -11,28 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141023150334) do
+ActiveRecord::Schema.define(version: 20141104140225) do
 
-  create_table "text_infos", primary_key: "textinfo_id", force: true do |t|
-    t.integer  "user_id",                       null: false
-    t.string   "lecture_name",                  null: false
-    t.string   "textbook_name",                 null: false
-    t.integer  "price",                         null: false
+  create_table "texts", primary_key: "textinfo_id", force: true do |t|
+    t.integer  "user_id",                                    null: false
+    t.string   "lecture_name",                               null: false
+    t.string   "textbook_name",                              null: false
+    t.integer  "price",                                      null: false
     t.string   "comment"
-    t.binary   "image",         limit: 1048576
-    t.integer  "status"
+    t.binary   "image",         limit: 16777215
+    t.integer  "status",                         default: 1
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "user_infos", primary_key: "userinfo_id", force: true do |t|
+  create_table "users", primary_key: "user_id", force: true do |t|
     t.string   "name",       null: false
     t.string   "username",   null: false
     t.string   "link",       null: false
+    t.string   "univ"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "user_infos", ["userinfo_id"], name: "sqlite_autoindex_user_infos_1", unique: true
 
 end
