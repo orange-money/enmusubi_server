@@ -11,7 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141104140225) do
+ActiveRecord::Schema.define(version: 20141111155134) do
+
+  create_table "images", primary_key: "textinfo_id", force: true do |t|
+    t.string   "file_name",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "texts", primary_key: "textinfo_id", force: true do |t|
     t.integer  "user_id",                                    null: false
@@ -23,11 +29,11 @@ ActiveRecord::Schema.define(version: 20141104140225) do
     t.integer  "status",                         default: 1
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "univ",                                       null: false
   end
 
   create_table "users", primary_key: "user_id", force: true do |t|
     t.string   "name",       null: false
-    t.string   "username",   null: false
     t.string   "link",       null: false
     t.string   "univ"
     t.datetime "created_at"

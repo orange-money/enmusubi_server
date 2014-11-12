@@ -3,9 +3,13 @@ class TextsController < ApplicationController
 
   # GET /texts
   # GET /texts.json
+  @@univ = nil
   def index
-    @texts = Text.all
-    render :json => @texts
+    #  @texts = Text.all
+     @texts = Text.where("univ = ? and status = ?", params[:univ], 1)
+     #ステータスが1のものだけ出力する
+     @@univ = params[:univ]
+      render :json => @texts
   end
 
 
@@ -13,7 +17,9 @@ class TextsController < ApplicationController
   def search
     @textdatas = []
    if request.post? then
-      @textdatas = Text.where(textbook_name: params[:textbook_name]) #現時点では，教科書検索しか想定していない．
+      univ = @@univ
+      @textdatas = Text.where("univ = ? and status = ? and (textbook_name like ? or lecture_name like ?)", univ, 1, "%" + params[:textbook_lecture_name] + "%", "%" + params[:textbook_lecture_name] + "%") #現時点では，教科書検索しか想定していない．
+      # @textdatas = Text.where("textbook_name like ?","%" + textbook_name + "%")
       render :json => @textdatas
     end
   end
@@ -27,7 +33,7 @@ class TextsController < ApplicationController
   # GET /texts/new
   def new
     @text = Text.new
-    @text.user_id = '1234' #params[:user_id]
+  # @text.user_id = '1234' #params[:user_id]
 
     #アプリ側からpostで,そのユーザのIDが送られてくる．params[:user_id]で取得し，@text.user_idに格納する
   end
@@ -45,7 +51,7 @@ class TextsController < ApplicationController
       if @text.save
         #format.html { redirect_to text_path(@text), notice: 'Text was successfully created.' }
         # format.json { render :show, status: :created, location: @text }
-        render :json => @text
+         render :json => @text
       else
        # format.html { render :new }
         format.json { render json: @text.errors, status: :unprocessable_entity }
@@ -60,7 +66,7 @@ class TextsController < ApplicationController
       if @text.update(text_params)
        # format.html { redirect_to @text, notice: 'Text was successfully updated.' }
        # format.json { render :show, status: :ok, location: @text }
-       render :json => @text
+        render :json => @text
       else
        # format.html { render :edit }
         format.json { render json: @text.errors, status: :unprocessable_entity }
@@ -86,6 +92,6 @@ class TextsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def text_params
-      params.require(:text).permit(:user_id, :textinfo_id, :lecture_name, :textbook_name, :price, :comment, :image, :status)
+      params.require(:text).permit(:univ, :user_id, :textinfo_id, :lecture_name, :textbook_name, :price, :comment, :image, :status)
     end
 end

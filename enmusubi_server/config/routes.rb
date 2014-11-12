@@ -1,9 +1,21 @@
 Rails.application.routes.draw do
+
+    #imageモデルに関するルーティング
+  get 'images' =>  'images#index'
+    post  'images' =>  'images#create'
+    get    'images/new' => 'images#new', :as => 'new_image'
+    patch  'images/:textinfo_id'  =>  'images#update'
+    put   'images/:textinfo_id' =>  'images#update'
+    delete 'images/:textinfo_id'  =>  'images#destroy'
+    get 'images/:textinfo_id' => 'images#show', :as => 'image'
+    get 'images/:textinfo_id/edit'  =>  'images#edit', :as => 'edit_image'
+
   #userモデルに関するルーティング
 
     get 'users' =>  'users#index'
     post  'users' =>  'users#create'
-    get 'users/history'  =>  'users#history', :as => 'user_text_info'
+    get 'users/:user_id/history' => 'users#history', :as => 'user_text_info'
+   # get 'users/history'  =>  'users#history', :as => 'user_text_info'
     get    'users/new' => 'users#new', :as => 'new_user'
     patch  'users/:user_id'  =>  'users#update'
     put   'users/:user_id' =>  'users#update'
@@ -13,16 +25,17 @@ Rails.application.routes.draw do
     
 
   #textテーブルに関するルーティング
-    get 'texts' =>  'texts#index'
+    # get 'texts' =>  'texts#index'
+    
     post  'texts' =>  'texts#create'
     get    'texts/new' => 'texts#new', :as => 'new_text'
-    patch  'texts/:textinfo_id'  =>  'texts#update'
-    put   'texts/:textinfo_id' =>  'texts#update'
-    delete 'texts/:textinfo_id'  =>  'texts#destroy'
-    get 'texts/:textinfo_id' => 'texts#show', :as => 'text'
+    get 'texts/:univ'  => 'texts#index', :as => 'text_univ'
+    patch  'texts/:textinfo_id/detail'  =>  'texts#update'
+    put   'texts/:textinfo_id/detail' =>  'texts#update'
+    delete 'texts/:textinfo_id/detail'  =>  'texts#destroy'
+    get 'texts/:textinfo_id/detail' => 'texts#show', :as => 'text'
     get 'texts/:textinfo_id/edit'  =>  'texts#edit', :as => 'edit_text'
     post 'texts/search' => 'texts#search'
-
 
 
 

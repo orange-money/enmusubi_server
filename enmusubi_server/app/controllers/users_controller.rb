@@ -9,11 +9,13 @@ class UsersController < ApplicationController
   end
 
   def history
-    @textdatas = Text.where(user_id: '1234') # params[:user_id] 
+    @textdatas = Text.where(user_id: params[:user_id]) # params[:user_id] 
     #これもpostでそのユーザのIDが送られてくる．
     #それをparams[:user_id]で取得する．
     render :json => @textdatas
   end
+
+
 
   # GET /users/1
   # GET /users/1.json
@@ -34,17 +36,20 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-
+if(User.where(user_id: @user.user_id) == [])then#一致するuserがなければ#
     respond_to do |format|
       if @user.save
-      #  format.html { redirect_to @user, notice: 'User was successfully created.' }
-      #  format.json { render :show, status: :created, location: @user }
-      render :json => @user
+       # format.html { redirect_to @user, notice: 'User was successfully created.' }
+       # format.json { render :show, status: :created, location: @user }
+       render :json => @user
       else
       #  format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
+  else
+     render :json  => @user
+  end
   end
 
   # PATCH/PUT /users/1
@@ -52,9 +57,9 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-      #  format.html { redirect_to @user, notice: 'User was successfully updated.' }
-      #  format.json { render :show, status: :ok, location: @user }
-      render :json => @user
+      # format.html { redirect_to @user, notice: 'User was successfully updated.' }
+       # format.json { render :show, status: :ok, location: @user }
+       render :json => @user
       else
       #  format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -80,6 +85,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :username, :link, :univ, :user_id)
+      params.require(:user).permit(:name, :link, :univ, :user_id)
     end
 end
