@@ -20,7 +20,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    render :json => @user
+     render :json => @user
   end
 
   # GET /users/new
@@ -39,16 +39,16 @@ class UsersController < ApplicationController
 if(User.where(user_id: @user.user_id) == [])then#一致するuserがなければ#
     respond_to do |format|
       if @user.save
-       # format.html { redirect_to @user, notice: 'User was successfully created.' }
+          # format.html { redirect_to @user, notice: 'User was successfully created.' }
        # format.json { render :show, status: :created, location: @user }
-       render :json => @user
+      render :json => @user
       else
       #  format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   else
-     render :json  => @user
+     render :json  => User.where(user_id: @user.user_id) #response ok 
   end
   end
 

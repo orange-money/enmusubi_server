@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141111155134) do
+ActiveRecord::Schema.define(version: 20141116102921) do
 
   create_table "images", primary_key: "textinfo_id", force: true do |t|
     t.string   "file_name",  null: false
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20141111155134) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "univ",                                       null: false
+    t.string   "teacher"
   end
 
   create_table "users", primary_key: "user_id", force: true do |t|

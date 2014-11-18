@@ -6,7 +6,7 @@
       <th>Name</th>
       <th>Link</th>
       <th>Univ</th>
-      <th colspan="5"></th>
+      <th colspan="4"></th>
     </tr>
   </thead>
 
@@ -19,7 +19,7 @@
         <td><%= link_to 'Show', user %></td>
         <td><%= link_to 'Edit', edit_user_path(user) %></td>
         <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <td><%= link_to 'univ', text_univ_path(user.univ) %></td>
+        
         <td><%= link_to 'history', user_text_info_path(user.user_id) %></td>
       </tr>
     <% end %>
