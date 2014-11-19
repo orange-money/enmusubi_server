@@ -37,16 +37,17 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 if(User.where(user_id: @user.user_id) == [])then#一致するuserがなければ#
-    respond_to do |format|
+    # respond_to do |format|
       if @user.save
           # format.html { redirect_to @user, notice: 'User was successfully created.' }
        # format.json { render :show, status: :created, location: @user }
       render :json => @user
       else
       #  format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+      #  format.json { render json: @user.errors, status: :unprocessable_entity }
+         render :text => 'error'
       end
-    end
+    #end
   else
      render :json  => User.where(user_id: @user.user_id) #response ok 
   end
@@ -55,16 +56,17 @@ if(User.where(user_id: @user.user_id) == [])then#一致するuserがなければ
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    respond_to do |format|
+    #respond_to do |format|
       if @user.update(user_params)
       # format.html { redirect_to @user, notice: 'User was successfully updated.' }
        # format.json { render :show, status: :ok, location: @user }
        render :json => @user
       else
       #  format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+       # format.json { render json: @user.errors, status: :unprocessable_entity }
+       render :text => 'error'
       end
-    end
+    #end
   end
 
   # DELETE /users/1
