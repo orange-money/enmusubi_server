@@ -47,31 +47,33 @@ class TextsController < ApplicationController
   def create
     @text = Text.new(text_params)
 
-    respond_to do |format|
+    # respond_to do |format|
       if @text.save
         #format.html { redirect_to text_path(@text), notice: 'Text was successfully created.' }
         # format.json { render :show, status: :created, location: @text }
          render :json => @text
       else
        # format.html { render :new }
-        format.json { render json: @text.errors, status: :unprocessable_entity }
+        #format.json { render json: @text.errors, status: :unprocessable_entity }
+        render :text => 'error'
       end
-    end
+    #end
   end
 
   # PATCH/PUT /texts/1
   # PATCH/PUT /texts/1.json
   def update
-    respond_to do |format|
+  #  respond_to do |format|
       if @text.update(text_params)
        # format.html { redirect_to @text, notice: 'Text was successfully updated.' }
        # format.json { render :show, status: :ok, location: @text }
         render :json => @text
       else
        # format.html { render :edit }
-        format.json { render json: @text.errors, status: :unprocessable_entity }
+      #  format.json { render json: @text.errors, status: :unprocessable_entity }
+      render :text => 'error'
       end
-    end
+  #  end
   end
 
   # DELETE /texts/1

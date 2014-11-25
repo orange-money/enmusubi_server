@@ -38,16 +38,17 @@ class ImagesController < ApplicationController
   object.write(file ,:acl => :public_read)
   @image.file_name="http://s3-ap-northeast-1.amazonaws.com/ishidayouichi/image/#{file_name}"
      
-  respond_to do |format|
+ # respond_to do |format|
     if @image.save
      # format.html { redirect_to @image, notice: 'S3image was successfully created.' }
      # format.json { render action: 'show', status: :created, location: @image }
      render :json => @image
     else
      # format.html { render action: 'new' }
-      format.json { render json: @image.errors, status: :unprocessable_entity }
+     # format.json { render json: @image.errors, status: :unprocessable_entity }
+     render :text => 'error'
     end
-  end
+  #end
 end
 
   # PATCH/PUT /images/1
