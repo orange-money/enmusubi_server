@@ -1,5 +1,7 @@
+# encoding: utf-8
 class TextsController < ApplicationController
   before_action :set_text, only: [:show, :edit, :update, :destroy]
+  AWS.config(access_key_id: 'AKIAIPSMHHQZDEJKAGEA', secret_access_key: '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', region: 'ap-northeast-1')
 
   # GET /texts
   # GET /texts.json
@@ -7,13 +9,11 @@ class TextsController < ApplicationController
   def index
     #  @texts = Text.all
      @texts = Text.where("univ = ? and status = ?", params[:univ], 1)
-     #ステータスが1のものだけ出力する
-    # @@univ = params[:univ]
-    @texts.each do |text| 
+     @texts.each do |text| 
       if(text.teacher != nil)then
       text.teacher = text.teacher.force_encoding('utf-8')
       end
-      if(text.lecture_name != nil)then
+    if(text.lecture_name != nil)then
       text.lecture_name = text.lecture_name.force_encoding('utf-8')
       end
       if(text.textbook_name != nil) then
@@ -24,9 +24,18 @@ class TextsController < ApplicationController
       end
       if(text.univ != nil)then
       text.univ = text.univ.force_encoding('utf-8')
-      end
+      end 
+      if(text.file_name != nil)then
+      text.file_name = text.file_name.force_encoding('utf-8')
+      end 
+     
     end
-      render :json => @texts
+
+    
+
+      render :json => @texts.to_json(:include =>  {:user => { :only => ['link']}})
+       #render :json => @texts
+     # render :json => @texts.to_json(:include => [:image])
   end
 
 
@@ -53,6 +62,9 @@ class TextsController < ApplicationController
       if(text.univ != nil)then
       text.univ = text.univ.force_encoding('utf-8')
       end
+      if(text.file_name != nil)then
+      text.file_name = text.file_name.force_encoding('utf-8')
+      end
     end
       render :json => @textdatas
     end
@@ -61,9 +73,10 @@ class TextsController < ApplicationController
   # GET /texts/1
   # GET /texts/1.json
   def show
-    @user = User.where("user_id = ?", @text.user_id)
-     @image = Image.where("textinfo_id = ?", @text.textinfo_id)
-     if(@text.teacher != nil)then
+     @user = User.where("user_id = ?", @text.user_id)
+    # @image = Image.where("image_id = ?", @text.image_id)
+    #render :json => @user
+if(@text.teacher != nil)then
       @text.teacher = @text.teacher.force_encoding('utf-8')
       end
       if(@text.lecture_name != nil)then
@@ -78,13 +91,18 @@ class TextsController < ApplicationController
       if(@text.univ != nil)then
       @text.univ = @text.univ.force_encoding('utf-8')
       end
-      @user.each do |use| 
-          if(use.univ != nil)then
-               use.univ = use.univ.force_encoding('utf-8')
-    #render :json => use
-          end
+      if(@text.file_name != nil)then
+      @text.file_name = @text.file_name.force_encoding('utf-8')
       end
-    render :json => {:text => @text, :user => @user[0], :image => @image[0]}
+      @user.each do |use| 
+     if(use.univ != nil)then
+    use.univ = use.univ.force_encoding('utf-8')
+    #render :json => use
+      end
+end
+   # render :json => @text.to_json(:include => [:user])
+   render :json => {:text => @text, :user => @user[0]}
+   # {:moulding => @moulding, :material_costs => @material_costs }
   end
 
   # GET /texts/new
@@ -103,8 +121,19 @@ class TextsController < ApplicationController
   # POST /texts.json
   def create
     @text = Text.new(text_params)
+    s3 = AWS::S3.new
+    bucket = s3.buckets['ishidayouichi']
+    file = text_params[:file]
 
+    if(file != nil)then
+    file_name = file.original_filename
+    file_full_path="image/"+file_name
+     
+    object = bucket.objects[file_full_path]
+    object.write(file ,:acl => :public_read)
+    @text.file_name="http://s3-ap-northeast-1.amazonaws.com/ishidayouichi/image/#{file_name}"
     # respond_to do |format|
+  end
       if @text.save
         #format.html { redirect_to text_path(@text), notice: 'Text was successfully created.' }
         # format.json { render :show, status: :created, location: @text }
@@ -166,6 +195,6 @@ class TextsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def text_params
-      params.require(:text).permit(:teacher, :univ, :user_id, :textinfo_id, :lecture_name, :textbook_name, :price, :comment, :image, :status)
+      params.require(:text).permit(:teacher, :univ, :user_id, :textinfo_id, :lecture_name, :textbook_name, :price, :comment, :file, :status)
     end
 end
