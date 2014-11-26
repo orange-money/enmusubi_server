@@ -52,4 +52,4 @@ production:
   <<: *default
   database: enmusubi_database
   username: youichi0313
-  password: <%= ENV['YOUICHI0313_DATABASE_PASSWORD'] %>
+  password: azasu5E5
