@@ -9,6 +9,23 @@ class TextsController < ApplicationController
      @texts = Text.where("univ = ? and status = ?", params[:univ], 1)
      #ステータスが1のものだけ出力する
     # @@univ = params[:univ]
+    @texts.each do |text| 
+      if(text.teacher != nil)then
+      text.teacher = text.teacher.force_encoding('utf-8')
+      end
+      if(text.lecture_name != nil)then
+      text.lecture_name = text.lecture_name.force_encoding('utf-8')
+      end
+      if(text.textbook_name != nil) then
+      text.textbook_name = text.textbook_name.force_encoding('utf-8')
+      end
+      if(text.comment != nil)then
+      text.comment = text.comment.force_encoding('utf-8')
+      end
+      if(text.univ != nil)then
+      text.univ = text.univ.force_encoding('utf-8')
+      end
+    end
       render :json => @texts
   end
 
@@ -20,6 +37,23 @@ class TextsController < ApplicationController
       # univ = @@univ
       @textdatas = Text.where("univ = ? and status = ? and (textbook_name like ? or lecture_name like ?)", params[:univ], 1, "%" + params[:textbook_lecture_name] + "%", "%" + params[:textbook_lecture_name] + "%") #現時点では，教科書検索しか想定していない．
       # @textdatas = Text.where("textbook_name like ?","%" + textbook_name + "%")
+      @textdatas.each do |text| 
+      if(text.teacher != nil)then
+      text.teacher = text.teacher.force_encoding('utf-8')
+      end
+    if(text.lecture_name != nil)then
+      text.lecture_name = text.lecture_name.force_encoding('utf-8')
+      end
+      if(text.textbook_name != nil) then
+      text.textbook_name = text.textbook_name.force_encoding('utf-8')
+      end
+      if(text.comment != nil)then
+      text.comment = text.comment.force_encoding('utf-8')
+      end
+      if(text.univ != nil)then
+      text.univ = text.univ.force_encoding('utf-8')
+      end
+    end
       render :json => @textdatas
     end
   end
@@ -27,7 +61,30 @@ class TextsController < ApplicationController
   # GET /texts/1
   # GET /texts/1.json
   def show
-    render :json => @text
+    @user = User.where("user_id = ?", @text.user_id)
+     @image = Image.where("textinfo_id = ?", @text.textinfo_id)
+     if(@text.teacher != nil)then
+      @text.teacher = @text.teacher.force_encoding('utf-8')
+      end
+      if(@text.lecture_name != nil)then
+      @text.lecture_name = @text.lecture_name.force_encoding('utf-8')
+      end
+      if(@text.textbook_name != nil)then
+      @text.textbook_name = @text.textbook_name.force_encoding('utf-8')
+      end
+      if(@text.comment != nil)then
+      @text.comment = @text.comment.force_encoding('utf-8')
+      end
+      if(@text.univ != nil)then
+      @text.univ = @text.univ.force_encoding('utf-8')
+      end
+      @user.each do |use| 
+          if(use.univ != nil)then
+               use.univ = use.univ.force_encoding('utf-8')
+    #render :json => use
+          end
+      end
+    render :json => {:text => @text, :user => @user[0], :image => @image[0]}
   end
 
   # GET /texts/new
@@ -67,6 +124,21 @@ class TextsController < ApplicationController
       if @text.update(text_params)
        # format.html { redirect_to @text, notice: 'Text was successfully updated.' }
        # format.json { render :show, status: :ok, location: @text }
+       if(@text.teacher != nil)then
+       @text.teacher = @text.teacher.force_encoding('utf-8')
+       end
+       if(@text.lecture_name != nil)then
+      @text.lecture_name = @text.lecture_name.force_encoding('utf-8')
+      end
+      if(@text.textbook_name != nil)then
+      @text.textbook_name = @text.textbook_name.force_encoding('utf-8')
+      end
+      if(@text.comment != nil)then
+      @text.comment = @text.comment.force_encoding('utf-8')
+      end
+      if(@text.univ != nil)then
+      @text.univ = @text.univ.force_encoding('utf-8')
+      end
         render :json => @text
       else
        # format.html { render :edit }

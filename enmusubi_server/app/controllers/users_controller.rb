@@ -5,6 +5,14 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.all
+    @users.each do |user| 
+      if(user.name != nil)then
+      user.name = user.name.force_encoding('utf-8')
+      end
+      if(user.univ != nil)then
+      user.univ = user.univ.force_encoding('utf-8')
+      end
+    end
     render :json => @users
   end
 
@@ -12,6 +20,23 @@ class UsersController < ApplicationController
     @textdatas = Text.where(user_id: params[:user_id]) # params[:user_id] 
     #これもpostでそのユーザのIDが送られてくる．
     #それをparams[:user_id]で取得する．
+    @textdatas.each do |text| 
+      if(text.teacher != nil)then
+      text.teacher = text.teacher.force_encoding('utf-8')
+      end
+      if(text.lecture_name != nil)then
+      text.lecture_name = text.lecture_name.force_encoding('utf-8')
+      end
+      if(text.textbook_name != nil) then
+      text.textbook_name = text.textbook_name.force_encoding('utf-8')
+      end
+      if(text.comment != nil)then
+      text.comment = text.comment.force_encoding('utf-8')
+      end
+      if(text.univ != nil)then
+      text.univ = text.univ.force_encoding('utf-8')
+      end
+    end
     render :json => @textdatas
   end
 
@@ -20,6 +45,12 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    if(@user.name != nil)then
+      @user.name = @user.name.force_encoding('utf-8')
+      end
+    if(@user.univ != nil)then
+      @user.univ = @user.univ.force_encoding('utf-8')
+      end
      render :json => @user
   end
 
@@ -38,6 +69,12 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 if(User.where(user_id: @user.user_id) == [])then#一致するuserがなければ#
     # respond_to do |format|
+    if(@user.name != nil)then
+      @user.name = @user.name.force_encoding('utf-8')
+      end
+    if(@user.univ != nil)then
+      @user.univ = @user.univ.force_encoding('utf-8')
+      end
       if @user.save
           # format.html { redirect_to @user, notice: 'User was successfully created.' }
        # format.json { render :show, status: :created, location: @user }
@@ -60,6 +97,12 @@ if(User.where(user_id: @user.user_id) == [])then#一致するuserがなければ
       if @user.update(user_params)
       # format.html { redirect_to @user, notice: 'User was successfully updated.' }
        # format.json { render :show, status: :ok, location: @user }
+       if(@user.name != nil)then
+      @user.name = @user.name.force_encoding('utf-8')
+      end
+    if(@user.univ != nil)then
+      @user.univ = @user.univ.force_encoding('utf-8')
+      end
        render :json => @user
       else
       #  format.html { render :edit }
