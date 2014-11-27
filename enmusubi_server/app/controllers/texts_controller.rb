@@ -66,7 +66,7 @@ class TextsController < ApplicationController
       text.file_name = text.file_name.force_encoding('utf-8')
       end
     end
-      render :json => @textdatas
+      render :json => @textdatas.to_json(:include =>  {:user => { :only => ['link']}})
     end
   end
 
